@@ -7,7 +7,7 @@ def get_soup(url,header):
     return BeautifulSoup(urllib.request.urlopen(urllib.request.Request(url,headers=header)),'html.parser')
 
 
-query = input("query image\n")# you can change the query for the image  here
+query = input("Enter Image Query\n")# you can change the query for the image  here
 image_type="ActiOn"
 query= query.split()
 query='+'.join(query)
@@ -19,8 +19,6 @@ header={'User-Agent':"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KH
 }
 soup = get_soup(url,header)
 
-
-
 ActualImages=[]# contains the link for Large original images, type of  image
 for a in soup.find_all("div",{"class":"rg_meta"}):
     link , Type =json.loads(a.text)["ou"]  ,json.loads(a.text)["ity"]
@@ -28,13 +26,15 @@ for a in soup.find_all("div",{"class":"rg_meta"}):
 
 print("there are total" , len(ActualImages),"images")
 
+#Checks for problems with retrieving the images in the query
 for i ,(img,Type) in enumerate(ActualImages):
 	try:
 		if len(Type)==0:
 			Type='jpg'
 		path=str(i)+"."+Type
-		print("Wait, Downloading..."+str(i))
+		print("Please Wait, Downloading..."+str(i))
 		urllib.request.urlretrieve(img, "ho/"+path)
-	except Exception as e:
-		print(e)
+	#prints error message
+	except Exception as error:
+		print(error)
 		input(img)
